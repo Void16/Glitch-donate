@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="confetti" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="5" r="1" fill="%23FFD700" opacity="0.8"/><rect x="15" y="10" width="2" height="2" fill="%23FF69B4" opacity="0.6"/><polygon points="5,15 7,18 3,18" fill="%2300CED1" opacity="0.7"/></pattern></defs><rect width="100" height="100" fill="url(%23confetti)"/></svg>') repeat;
+    opacity: 0.1;
+    animation: float 20s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+  
+  .birthday-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 1rem;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+  
+  .carousel-container {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    margin: 2rem 0;
+  }
+  
+  .carousel-item img {
+    height: 500px;
+    object-fit: cover;
+    filter: brightness(0.9);
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-item.active img {
+    filter: brightness(1);
+    transform: scale(1.02);
+  }
+  
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 5%;
+    background: linear-gradient(45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
+    border-radius: 0 10px 10px 0;
+  }
+  
+  .carousel-control-next {
+    border-radius: 10px 0 0 10px;
+  }
+  
+  .carousel-indicators {
+    bottom: -50px;
+  }
+  
+  .carousel-indicators li {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background-color: rgba(255,255,255,0.5);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-indicators .active {
+    background-color: #667eea;
+    transform: scale(1.2);
+    border-color: white;
+  }
+  
+  .donate-section {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-top: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .donate-section::before {
+    content: '🎁';
+    position: absolute;
+    font-size: 8rem;
+    opacity: 0.1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 10s linear infinite;
+  }
+  
+  @keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  .donate-btn {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .donate-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+    z-index: -1;
+  }
+  
+  .donate-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(40, 167, 69, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+  
+  .donate-btn:hover::before {
+    left: 100%;
+  }
+  
+  .emoji-float {
+    position: absolute;
+    font-size: 2rem;
+    animation: floatEmoji 6s ease-in-out infinite;
+    opacity: 0.7;
+  }
+  
+  @keyframes floatEmoji {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-15px) rotate(5deg); }
+    50% { transform: translateY(-10px) rotate(-5deg); }
+    75% { transform: translateY(-20px) rotate(3deg); }
+  }
+  
+  .stats-section {
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+  
+  .stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+    margin: 1rem;
+    flex: 1;
+    min-width: 200px;
+    transition: transform 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section text-center">
+  <div class="emoji-float" style="top: 10%; left: 10%;">🎈</div>
+  <div class="emoji-float" style="top: 20%; right: 15%; animation-delay: -2s;">🎂</div>
+  <div class="emoji-float" style="bottom: 20%; left: 20%; animation-delay: -4s;">🎁</div>
+  <div class="emoji-float" style="bottom: 30%; right: 10%; animation-delay: -1s;">✨</div>
+  
+  <h1 class="birthday-title">Happy Birthday! 🎉</h1>
+  <p class="subtitle">Celebrate with us and make a difference</p>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-section">
+  <div class="stat-card">
+    <div class="stat-number">🎂</div>
+    <h4>Birthday Celebration</h4>
+    <p>Every donation helps make this day special</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">💝</div>
+    <h4>Gift of Giving</h4>
+    <p>Your contribution creates lasting impact</p>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">🌟</div>
+    <h4>Make a Wish</h4>
+    <p>Help us turn birthday wishes into reality</p>
+  </div>
+</div>
+
+<!-- Photo Carousel -->
+<div class="carousel-container">
+  <div id="birthdayCarousel" class="carousel slide" data-ride="carousel" data-interval="4000">
+    <ol class="carousel-indicators">
+      <li data-target="#birthdayCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#birthdayCarousel" data-slide-to="1"></li>
+      <li data-target="#birthdayCarousel" data-slide-to="2"></li>
+    </ol>
+    
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'images/pic1.jpg' %}" class="d-block w-100" alt="Birthday Celebration 1">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>🎊 Celebrating Life</h5>
+          <p>Every moment is worth celebrating</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/pic2.jpg' %}" class="d-block w-100" alt="Birthday Celebration 2">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>🎈 Making Memories</h5>
+          <p>Creating unforgettable moments together</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/pic3.jpg' %}" class="d-block w-100" alt="Birthday Celebration 3">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>✨ Spreading Joy</h5>
+          <p>Sharing happiness with everyone</p>
+        </div>
+      </div>
+    </div>
+    
+    <a class="carousel-control-prev" href="#birthdayCarousel" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#birthdayCarousel" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+<!-- Donation Call-to-Action -->
+<div class="donate-section">
+  <h2 style="color: white; margin-bottom: 1rem; font-weight: bold;">🎁 Give the Gift of Giving</h2>
+  <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 2rem;">
+    Join us in making this birthday extra special with your generous contribution
+  </p>
+  {% if user.is_authenticated %}
+    <a href="{% url 'donate' %}" class="donate-btn">
+      💳 Donate via EcoCash
+    </a>
+  {% else %}
+    <a href="{% url 'login' %}" class="donate-btn">
+      🚀 Login to Donate
+    </a>
+  {% endif %}
+</div>
+
+<script>
+// Add some interactive elements
+document.addEventListener('DOMContentLoaded', function() {
+    // Add sparkle effect on hover
+    const donateBtn = document.querySelector('.donate-btn');
+    if (donateBtn) {
+        donateBtn.addEventListener('mouseenter', function() {
+            // Create sparkle elements
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.innerHTML = '✨';
+                    sparkle.style.position = 'absolute';
+                    sparkle.style.pointerEvents = 'none';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animation = 'sparkle 1s ease-out forwards';
+                    sparkle.style.zIndex = '1000';
+                    
+                    this.appendChild(sparkle);
+                    
+                    setTimeout(() => sparkle.remove(), 1000);
+                }, i * 100);
+            }
+        });
+    }
+});
+
+// Add sparkle animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes sparkle {
+        0% { transform: scale(0) rotate(0deg); opacity: 1; }
+        50% { transform: scale(1) rotate(180deg); opacity: 0.8; }
+        100% { transform: scale(0) rotate(360deg); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}

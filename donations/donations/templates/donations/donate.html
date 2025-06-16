@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Manual EcoCash Transfer</h3>
+<p>Send money to: <strong>077XXXXXXX</strong></p>
+<p>After payment, upload your confirmation below.</p>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary" type="submit">Submit Donation</button>
+</form>
+{% endblock %}
