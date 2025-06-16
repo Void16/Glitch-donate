@@ -1,1 +1,1 @@
-web: gunicorn birthday_donations.wsgi
+web: gunicorn birthday_donations.wsgi:application --bind 0.0.0.0:$PORT
